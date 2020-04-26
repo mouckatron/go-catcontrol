@@ -1,9 +1,7 @@
 package radios
 
 import (
-	"bytes"
 	"errors"
-	"fmt"
 	"log"
 	"time"
 
@@ -59,92 +57,20 @@ func (r *Radio) Settings() {
 	}
 }
 
-type RadioCommand interface {
-	toString() string
-	get() (string, error)
-	set(value string)
-}
-
-// Information about the command
-type RadioCommandOptions struct {
-	radio *Radio
-	name string
-	command string
-	read bool
-	write bool
-	readCommand string
-	writeCommand string
-	options []RadioCommandOption
-}
-
-type RadioCommandOption struct {
-	name string
-	value string
-}
-
-func (rc RadioCommandOptions) toString() string {
-
-	var output bytes.Buffer
-	output.WriteString(rc.name)
-	output.WriteString(":")
-	result, _ := rc.get()
-	output.WriteString(result)
-	output.WriteString(" options[")
-
-	for _, x := range rc.options {
-		output.WriteString(x.name)
-		output.WriteString(":")
-		output.WriteString(x.value)
-		output.WriteString(",")
+func (r *Radio) GetSetting(setting string) (string, error) {
+	for _, cmd := range r.Commands {
+		if cmd.Command() == setting {
+			return cmd.get()
+		}
 	}
-
-	return fmt.Sprintf("%s]", string(bytes.TrimSuffix(output.Bytes(), []byte{','})))
+	return "", errors.New("Command not found")
 }
 
-func (rc RadioCommandOptions) set(value string) {
-
-}
-
-func (rc RadioCommandOptions) get() (string, error) {
-	if rc.read {
-		response := string(rc.radio.sendCommand(rc.readCommand))
-		return response, nil
+func (r *Radio) SetSetting(setting string, value string) (error) {
+	for _, cmd := range r.Commands {
+		if cmd.Command() == setting {
+			return cmd.set(value)
+		}
 	}
-	return "", errors.New("Command does not support read")
+	return errors.New("Command not found")
 }
-
-type RadioCommandString struct {
-	radio *Radio
-	name string
-	command string
-	read bool
-	write bool
-	readCommand string
-	writeCommand string
-}
-
-func (rc RadioCommandString) toString() string {
-
-	result, _ := rc.get()
-	return fmt.Sprintf("%s: %s", rc.name, result)
-}
-
-func (rc RadioCommandString) set(value string) {
-
-}
-
-func (rc RadioCommandString) get() (string, error) {
-	if rc.read {
-		response := string(rc.radio.sendCommand(rc.readCommand))
-		return response, nil
-	}
-	return "", errors.New("Command does not support read")
-}
-
-
-// // run the command against the radio
-// type RadioSetting struct {
-// 	RadioCommand
-// }
-
-// func (r RadioSetting) getSetting(*r RadioBasic)
