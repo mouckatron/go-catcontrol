@@ -51,11 +51,38 @@ func NewYaesuFT891() (*Radio) {
 				RadioCommandOption{"On (Down)", "1"},
 				RadioCommandOption{"On (Up)", "2"},
 			}},
+		RadioCommandOptions{r, "Width", "SH", true, true, "SH0;", "SH0%s;",
+			[]RadioCommandOption{
+				RadioCommandOption{"Default", "00"},
+				RadioCommandOption{"Default", "01"},
+				RadioCommandOption{"Default", "02"},
+				RadioCommandOption{"Default", "03"},
+				RadioCommandOption{"Default", "04"},
+				RadioCommandOption{"Default", "05"},
+				RadioCommandOption{"Default", "06"},
+				RadioCommandOption{"Default", "07"},
+				RadioCommandOption{"Default", "08"},
+				RadioCommandOption{"Default", "09"},
+				RadioCommandOption{"Default", "10"},
+				RadioCommandOption{"Default", "11"},
+				RadioCommandOption{"Default", "12"},
+				RadioCommandOption{"Default", "13"},
+				RadioCommandOption{"Default", "14"},
+				RadioCommandOption{"Default", "15"},
+				RadioCommandOption{"Default", "16"},
+				RadioCommandOption{"Default", "17"},
+				RadioCommandOption{"Default", "18"},
+				RadioCommandOption{"Default", "19"},
+				RadioCommandOption{"Default", "20"},
+				RadioCommandOption{"Default", "21"},
+			}},
 
 // String Commands
+		RadioCommandString{r, "Dimmer", "DA", true, true, "DA;", "DA%s;"},
 		RadioCommandString{r, "Frequency VFO-A", "FA", true, true, "FA;", "FA%s;"},
 		RadioCommandString{r, "Identification", "ID", true, false, "ID;", ""},
 		RadioCommandString{r, "Information", "IF", true, false, "IF;", ""},
+		RadioCommandString{r, "Power Control", "PC", true, true, "PC;", "PC%s;"},
 	}
     return r
 }
